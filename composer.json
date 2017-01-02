@@ -1,0 +1,28 @@
+{
+  "name": "socioseninternet/phpci-lessc",
+  "description": "PHPCI plugin for Lessc",
+  "license": "GNU",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Ivan Bustos",
+      "email": "contacto@ivanbustos.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "SociosEnInternet\\PhpciPlugins\\": "src"
+    }
+  },
+  "extra": {
+    "phpci": {
+      "pluginNamespace": "SociosEnInternet\\PhpciPlugins\\",
+      "suppliedPlugins": [
+        {"name": "Lessc", "class": "Lessc"}
+      ]
+    }
+  }
+}
