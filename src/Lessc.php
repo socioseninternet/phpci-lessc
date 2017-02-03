@@ -42,18 +42,17 @@ class Lessc implements PHPCI\Plugin, PHPCI\ZeroConfigPlugin
      */
     public function __construct(Builder $phpci, Build $build, array $options = array())
     {
-        $path             = $phpci->buildPath;
         $this->phpci      = $phpci;
         $this->build      = $build;
-        $this->lessDirectory  = $path;
-        $this->cssDirectory = $path;
+        $this->lessDirectory  = '';
+        $this->cssDirectory = '';
 
         if (array_key_exists('lessDirectory', $options)) {
-            $this->lessDirectory = $path . $options['lessDirectory'];
+            $this->lessDirectory = $options['lessDirectory'];
         }
 
         if (array_key_exists('cssDirectory', $options)) {
-            $this->cssDirectory = $path . $options['cssDirectory'];
+            $this->cssDirectory = $options['cssDirectory'];
         }
     }
 
@@ -62,7 +61,10 @@ class Lessc implements PHPCI\Plugin, PHPCI\ZeroConfigPlugin
     */
     public function execute()
     {
-        $cmd = $this->phpci->findBinary(array('lessc')) . ' "%s %s"';
+        $pwdLocation = $this->phpci->findBinary(array('pwd'));
+        $this->phpci->executeCommand($pwdLocation);
+        $build_location = $this->phpci->getLastOutput();
+        $cmd = 'cd ' . $build_location . ' && ' . $this->phpci->findBinary(array('lessc')) . ' "%s %s"';
         foreach (glob($this->lessDirectory . '/*.less') as $filename) {
             $basename = basename($filename, '.less');
             $this->phpci->executeCommand($cmd, $filename, $this->cssDirectory . '/' . $basename . '.css'); 
